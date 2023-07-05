@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.33711.374
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HighlightMe.App", "HighlightMe.App\HighlightMe.App.csproj", "{EFC1D94F-6539-41CA-8C82-AA2D0B628935}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EFC1D94F-6539-41CA-8C82-AA2D0B628935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFC1D94F-6539-41CA-8C82-AA2D0B628935}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFC1D94F-6539-41CA-8C82-AA2D0B628935}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFC1D94F-6539-41CA-8C82-AA2D0B628935}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F8C62D36-89E4-4707-B905-5BC0C63B67F7}
+	EndGlobalSection
+EndGlobal
