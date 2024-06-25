@@ -1,4 +1,5 @@
-using System.Drawing.Drawing2D;
+﻿using System.Drawing.Drawing2D;
+using System.IO;
 
 namespace HighlightMe.App;
 
@@ -14,6 +15,8 @@ public partial class MainForm : Form
     private int dragStartY;
     private int dragCurX;
     private int dragCurY;
+    private bool inFileMode;
+    private string filePath = string.Empty;
 
     public MainForm()
     {
@@ -92,7 +95,7 @@ public partial class MainForm : Form
         if (!hideSearcher && !drag)
         {
             const int searcherSize = 40;
-            var searchWindow = new Rectangle(dragCurX - searcherSize/ 2, dragCurY - searcherSize / 2, searcherSize, searcherSize);
+            var searchWindow = new Rectangle(dragCurX - searcherSize / 2, dragCurY - searcherSize / 2, searcherSize, searcherSize);
 
             if (originalImage.Width < searchWindow.X + searchWindow.Width)
             {
@@ -213,6 +216,34 @@ public partial class MainForm : Form
     #endregion
 
     #region ButtonHandler
+    
+    private void btnLoadClipboard_Click(object? sender, EventArgs e)
+    {
+        Clear();
+        if (inFileMode)
+        {
+            using var openFileDialog = new OpenFileDialog
+            {
+                Filter = "Image files (*.png;*.jpeg;*.jpg;*.bmp)|*.png;*.jpeg;*.jpg;*.bmp|All files (*.*)|*.*",
+                Title = "Select an image file"
+            };
+
+            if (openFileDialog.ShowDialog() != DialogResult.OK)
+                return;
+            
+            var image = Image.FromFile(openFileDialog.FileName);
+            filePath = openFileDialog.FileName;
+            SetImage(image);
+        }
+        else
+        {
+            if (!Clipboard.ContainsImage())
+                return;
+
+            var image = Clipboard.GetImage();
+            SetImage(image);
+        }
+    }
 
     private void btnSave_Click(object? sender, EventArgs e)
     {
@@ -220,7 +251,14 @@ public partial class MainForm : Form
         if (image is null)
             return;
 
-        Clipboard.SetImage(image);
+        if (inFileMode)
+        {
+            image.Save(filePath);
+        }
+        else
+        {
+            Clipboard.SetImage(image);
+        }
     }
 
     private void btnRevertLast_Click(object? sender, EventArgs e)
@@ -239,16 +277,6 @@ public partial class MainForm : Form
         Clear();
     }
 
-    private void btnLoadClipboard_Click(object? sender, EventArgs e)
-    {
-        Clear();
-        if (Clipboard.ContainsImage())
-        {
-            var image = Clipboard.GetImage();
-            SetImage(image);
-        }
-    }
-
     private void MainFormKeyDown(object? sender, KeyEventArgs e)
     {
         if (e is { Control: true, KeyCode: Keys.S })
@@ -257,7 +285,28 @@ public partial class MainForm : Form
         if (e is { Control: true, KeyCode: Keys.Z })
             btnRevertLast_Click(sender, e);
     }
+    
+    private void btnToggleInput_Click(object sender, EventArgs e)
+    {
+        inFileMode = !inFileMode;
+        SetButtonText();
+    }
+
+    private void SetButtonText()
+    {
+        if (inFileMode)
+        {
+            btnLoadClipboard.Text = "Load File";
+            btnSave.Text = "Save File";
+            btnToggleInput.Text = "Have in Clipboard?";
+        }
+        else
+        {
+            btnLoadClipboard.Text = "Load Clipboard";
+            btnSave.Text = "Save Clipboard";
+            btnToggleInput.Text = "Have a File?";
+        }
+    }
 
     #endregion
-
 }

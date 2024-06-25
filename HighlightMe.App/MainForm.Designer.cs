@@ -35,7 +35,8 @@
             btnRevertLast = new Button();
             btnClear = new Button();
             panel1 = new Panel();
-            ((System.ComponentModel.ISupportInitialize)pctBox).BeginInit();
+            btnToggleInput = new Button();
+            ((System.ComponentModel.ISupportInitialize) pctBox).BeginInit();
             SuspendLayout();
             // 
             // btnSave
@@ -50,7 +51,7 @@
             // 
             // pctBox
             // 
-            pctBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pctBox.Anchor =  AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pctBox.Location = new Point(12, 53);
             pctBox.Name = "pctBox";
             pctBox.Size = new Size(776, 385);
@@ -69,7 +70,7 @@
             // 
             // btnRevertLast
             // 
-            btnRevertLast.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRevertLast.Anchor =  AnchorStyles.Top | AnchorStyles.Right;
             btnRevertLast.Location = new Point(643, 12);
             btnRevertLast.Name = "btnRevertLast";
             btnRevertLast.Size = new Size(145, 28);
@@ -80,7 +81,7 @@
             // 
             // btnClear
             // 
-            btnClear.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnClear.Anchor =  AnchorStyles.Top | AnchorStyles.Right;
             btnClear.Location = new Point(492, 12);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(145, 28);
@@ -91,28 +92,39 @@
             // 
             // panel1
             // 
-            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            panel1.Anchor =  AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             panel1.BackColor = SystemColors.ControlText;
             panel1.Location = new Point(12, 46);
             panel1.Name = "panel1";
             panel1.Size = new Size(776, 1);
             panel1.TabIndex = 6;
             // 
+            // btnToggleInput
+            // 
+            btnToggleInput.Location = new Point(308, 12);
+            btnToggleInput.Name = "btnToggleInput";
+            btnToggleInput.Size = new Size(147, 28);
+            btnToggleInput.TabIndex = 7;
+            btnToggleInput.Text = "Have a File?";
+            btnToggleInput.UseVisualStyleBackColor = true;
+            btnToggleInput.Click += btnToggleInput_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnToggleInput);
             Controls.Add(panel1);
             Controls.Add(btnClear);
             Controls.Add(btnRevertLast);
             Controls.Add(btnLoadClipboard);
             Controls.Add(pctBox);
             Controls.Add(btnSave);
-            Icon = (Icon)resources.GetObject("$this.Icon");
+            Icon = (Icon) resources.GetObject("$this.Icon");
             Name = "MainForm";
             Text = "Highlight Me - Made with ❤️ in Switzerland by Oliver Heil ";
-            ((System.ComponentModel.ISupportInitialize)pctBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize) pctBox).EndInit();
             ResumeLayout(false);
         }
 
@@ -123,5 +135,6 @@
         private Button btnRevertLast;
         private Button btnClear;
         private Panel panel1;
+        private Button btnToggleInput;
     }
 }
