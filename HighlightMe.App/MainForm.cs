@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Drawing2D;
 using System.IO;
+using ImageMagick;
 
 namespace HighlightMe.App;
 
@@ -37,8 +38,13 @@ public partial class MainForm : Form
         if (originalImage is null)
             return;
 
-        bluredImage = BlurHelper
-            .FastGaussianBlur(new Bitmap(originalImage), blurSize);
+        var m = new MagickFactory();
+      
+        var bitmap = new Bitmap(originalImage);
+        var magickImage = m.Image.Create(bitmap);
+        magickImage.Blur(24, 12);
+        bluredImage = magickImage.ToBitmap();
+        
         ApplyHighlight();
         btnSave.Enabled = true;
     }
@@ -81,7 +87,7 @@ public partial class MainForm : Form
                 continue;
 
             var bitmap = new Bitmap(originalImage)
-                .Clone(highlightArea, originalImage.PixelFormat);
+               .Clone(highlightArea, originalImage.PixelFormat);
 
             var brush = new TextureBrush(bitmap);
             brush.WrapMode = WrapMode.Tile;
@@ -122,7 +128,7 @@ public partial class MainForm : Form
             }
 
             var bitmap = new Bitmap(originalImage)
-                .Clone(searchWindow, originalImage.PixelFormat);
+               .Clone(searchWindow, originalImage.PixelFormat);
             var brush = new TextureBrush(bitmap);
             brush.WrapMode = WrapMode.Tile;
             brush.TranslateTransform(searchWindow.X, searchWindow.Y);
@@ -207,16 +213,16 @@ public partial class MainForm : Form
             dragCurY = height;
 
         var rectangle = new Rectangle(Math.Min(dragStartx, dragCurX),
-            Math.Min(dragStartY, dragCurY),
-            Math.Abs(dragStartx - dragCurX),
-            Math.Abs(dragStartY - dragCurY));
+        Math.Min(dragStartY, dragCurY),
+        Math.Abs(dragStartx - dragCurX),
+        Math.Abs(dragStartY - dragCurY));
         return rectangle;
     }
 
     #endregion
 
     #region ButtonHandler
-    
+
     private void btnLoadClipboard_Click(object? sender, EventArgs e)
     {
         Clear();
@@ -230,10 +236,12 @@ public partial class MainForm : Form
 
             if (openFileDialog.ShowDialog() != DialogResult.OK)
                 return;
-            
-            var image = Image.FromFile(openFileDialog.FileName);
+
             filePath = openFileDialog.FileName;
-            SetImage(image);
+            MagickImage image = new MagickImage(openFileDialog.FileName);
+            image.Resize(image.Width, image.Height);
+            image.Quality = 90;
+            SetImage(image.ToBitmap());
         }
         else
         {
@@ -253,6 +261,7 @@ public partial class MainForm : Form
 
         if (inFileMode)
         {
+            File.Delete(filePath);
             image.Save(filePath);
         }
         else
@@ -279,13 +288,21 @@ public partial class MainForm : Form
 
     private void MainFormKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e is { Control: true, KeyCode: Keys.S })
+        if (e is
+            {
+                Control: true,
+                KeyCode: Keys.S
+            })
             btnSave_Click(sender, e);
 
-        if (e is { Control: true, KeyCode: Keys.Z })
+        if (e is
+            {
+                Control: true,
+                KeyCode: Keys.Z
+            })
             btnRevertLast_Click(sender, e);
     }
-    
+
     private void btnToggleInput_Click(object sender, EventArgs e)
     {
         inFileMode = !inFileMode;
